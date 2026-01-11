@@ -1,9 +1,9 @@
 package org.example.app.service;
 
-import org.example.app.entity.Contact;
-import org.example.app.exceptions.ContactException;
-import org.example.app.repository.impl.ContactRepository;
-import org.example.app.mapper.ContactMapper;
+import org.example.app.entity.User;
+import org.example.app.exceptions.UserException;
+import org.example.app.repository.impl.UserRepository;
+import org.example.app.mapper.UserMapper;
 import org.example.app.utils.AppValidator;
 import org.example.app.utils.Message;
 
@@ -12,91 +12,91 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ContactService {
+public class UserService {
 
-    ContactRepository repository = new ContactRepository();
+    UserRepository repository = new UserRepository();
 
-    public String createContact(Map<String, String> data) {
+    public String createUser(Map<String, String> data) {
         Map<String, String> errors =
-                AppValidator.validateContactData(data);
+                AppValidator.validateUserData(data);
         if (!errors.isEmpty()) {
             try {
-                throw new ContactException("Check inputs", errors);
-            } catch (ContactException e) {
+                throw new UserException("Check inputs", errors);
+            } catch (UserException e) {
                 return e.getErrors(errors);
             }
         }
-        return repository.create(new ContactMapper().mapContactData(data));
+        return repository.create(new UserMapper().mapUserData(data));
     }
 
-    public String readContacts() {
+    public String readUsers() {
         // Отримуємо дані
-        Optional<List<Contact>> optional = repository.read();
+        Optional<List<User>> optional = repository.read();
         // Якщо Optional не містить null, формуємо виведення.
         // Інакше повідомлення про відсутність даних.
         if (optional.isPresent()) {
             // Отримуємо колекцію з Optional
-            List<Contact> list = optional.get();
+            List<User> list = optional.get();
             // Якщо колекція не порожня, формуємо виведення.
             // Інакше повідомлення про відсутність даних.
             if (!list.isEmpty()) {
                 AtomicInteger count = new AtomicInteger(0);
                 StringBuilder stringBuilder = new StringBuilder();
-                list.forEach((contact) ->
+                list.forEach((user) ->
                         stringBuilder.append(count.incrementAndGet())
                                 .append(") ")
-                                .append(contact.toString())
+                                .append(user.toString())
                 );
-                return "\nCONTACTS:\n" + stringBuilder;
+                return "\nUsers:\n" + stringBuilder;
             } else return Message.DATA_ABSENT_MSG.getMessage();
         } else return Message.DATA_ABSENT_MSG.getMessage();
     }
 
-    public String updateContact(Map<String, String> data) {
+    public String updateUser(Map<String, String> data) {
         Map<String, String> errors =
-                AppValidator.validateContactData(data);
+                AppValidator.validateUserData(data);
         if (!errors.isEmpty()) {
             try {
-                throw new ContactException("Check inputs", errors);
-            } catch (ContactException e) {
+                throw new UserException("Check inputs", errors);
+            } catch (UserException e) {
                 return e.getErrors(errors);
             }
         }
-        return repository.update(new ContactMapper().mapContactData(data));
+        return repository.update(new UserMapper().mapUserData(data));
     }
 
-    public String deleteContact(Map<String, String> data) {
+    public String deleteUser(Map<String, String> data) {
         Map<String, String> errors =
-                AppValidator.validateContactData(data);
+                AppValidator.validateUserData(data);
         if (!errors.isEmpty()) {
             try {
-                throw new ContactException("Check inputs", errors);
-            } catch (ContactException e) {
+                throw new UserException("Check inputs", errors);
+            } catch (UserException e) {
                 return e.getErrors(errors);
             }
         }
-        return repository.delete(new ContactMapper().mapContactData(data).getId());
+        return repository.delete(new UserMapper().mapUserData(data).getId());
     }
 
-    public String readContactById(Map<String, String> data) {
+    public String readUserById(Map<String, String> data) {
         Map<String, String> errors =
-                AppValidator.validateContactData(data);
+                AppValidator.validateUserData(data);
         if (!errors.isEmpty()) {
             try {
-                throw new ContactException("Check inputs", errors);
-            } catch (ContactException e) {
+                throw new UserException("Check inputs", errors);
+            } catch (UserException e) {
                 return e.getErrors(errors);
             }
         }
         // Отримуємо дані
-        Optional<Contact> optional =
+        Optional<User> optional =
                 repository.readById(Long.parseLong(data.get("id")));
         // Якщо Optional не містить null, формуємо виведення.
         // Інакше повідомлення про відсутність даних.
         if (optional.isPresent()) {
             // Отримуємо об'єкт з Optional
-            Contact contact = optional.get();
-            return "\nCONTACT: " + contact + "\n";
+            User user = optional.get();
+            return "\nUser: " + user + "\n";
         } else return Message.DATA_ABSENT_MSG.getMessage();
     }
 }

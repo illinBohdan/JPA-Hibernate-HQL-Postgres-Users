@@ -9,11 +9,11 @@ import jakarta.persistence.*;
 // @Entity
 // Вказує, що клас є сутністю.
 //
-// @Table(name = "contacts")
+// @Table(name = "users")
 // Вказує таблицю в БД, з якою зіставлено цей об'єкт.
 @Entity
-@Table(name = "contacts")
-public class Contact {
+@Table(name = "users")
+public class User {
 
     // @Id
     // Визначає первинний ключ об'єкта.
@@ -39,12 +39,6 @@ public class Contact {
     @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "phone")
-    private String phone;
-
     @Column(name = "email")
     private String email;
 
@@ -64,22 +58,6 @@ public class Contact {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -91,7 +69,6 @@ public class Contact {
     @Override
     public String toString() {
         return  "id " + id +
-                ", " + firstName + " " + lastName +
-                ", phone " + phone + ", email " + email + "\n";
+                ", name " + firstName + " " + ", email " + email + "\n";
     }
 }

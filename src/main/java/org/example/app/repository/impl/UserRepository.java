@@ -1,6 +1,6 @@
 package org.example.app.repository.impl;
 
-import org.example.app.entity.Contact;
+import org.example.app.entity.User;
 import org.example.app.repository.BaseRepository;
 import org.example.app.config.HibernateConfig;
 import org.example.app.utils.Message;
@@ -12,10 +12,10 @@ import org.hibernate.query.Query;
 import java.util.List;
 import java.util.Optional;
 
-public class ContactRepository implements BaseRepository<Contact> {
+public class UserRepository implements BaseRepository<User> {
 
     @Override
-    public String create(Contact contact) {
+    public String create(User user) {
         Transaction transaction = null;
         try (Session session =
                      HibernateConfig.getSessionFactory().openSession()) {
@@ -24,16 +24,14 @@ public class ContactRepository implements BaseRepository<Contact> {
             // HQL-запит.
             // :[parameter name] - іменований параметр (named parameter),
             // двокрапка перед іменем.
-            String hql = "INSERT INTO Contact " +
-                    "(firstName, lastName, phone, email) " +
-                    "VALUES (:firstName, :lastName, :phone, :email)";
+            String hql = "INSERT INTO User " +
+                    "(firstName, email) " +
+                    "VALUES (:firstName, :email)";
             // Створення HQL-запиту
             MutationQuery query = session.createMutationQuery(hql);
             // Формування конкретних значень для певного іменованого параметра
-            query.setParameter("firstName", contact.getFirstName());
-            query.setParameter("lastName", contact.getLastName());
-            query.setParameter("phone", contact.getPhone());
-            query.setParameter("email", contact.getEmail());
+            query.setParameter("firstName", user.getFirstName());
+            query.setParameter("email", user.getEmail());
             // Виконання HQL-запиту
             query.executeUpdate();
             // Транзакція виконується
@@ -52,15 +50,15 @@ public class ContactRepository implements BaseRepository<Contact> {
     }
 
     @Override
-    public Optional<List<Contact>> read() {
+    public Optional<List<User>> read() {
         try (Session session =
                      HibernateConfig.getSessionFactory().openSession()) {
             Transaction transaction;
             // Транзакція стартує
             transaction = session.beginTransaction();
             // Формування колекції даними з БД через HQL-запит
-            List<Contact> list =
-                    session.createQuery("FROM Contact", Contact.class)
+            List<User> list =
+                    session.createQuery("FROM User", User.class)
                             .list();
             // Транзакція виконується
             transaction.commit();
@@ -74,11 +72,11 @@ public class ContactRepository implements BaseRepository<Contact> {
     }
 
     @Override
-    public String update(Contact contact) {
+    public String update(User user) {
         // Спершу перевіряємо наявність об'єкта в БД за таким id.
         // Якщо ні, повертаємо повідомлення про відсутність таких даних,
         // інакше оновлюємо відповідний об'єкт в БД
-        if (readById(contact.getId()).isEmpty()) {
+        if (readById(user.getId()).isEmpty()) {
             return Message.DATA_ABSENT_MSG.getMessage();
         } else {
             Transaction transaction = null;
@@ -89,17 +87,15 @@ public class ContactRepository implements BaseRepository<Contact> {
                 // HQL-запит.
                 // :[parameter name] - іменований параметр (named parameter),
                 // двокрапка перед іменем.
-                String hql = "UPDATE Contact " +
-                        "SET firstName = :firstName, lastName = :lastName, " +
-                        "phone = :phone, email = :email WHERE id = :id";
+                String hql = "UPDATE User " +
+                        "SET firstName = :firstName," +
+                        "email = :email WHERE id = :id";
                 // Створення HQL-запиту
                 MutationQuery query = session.createMutationQuery(hql);
                 // Формування конкретних значень для певного іменованого параметра
-                query.setParameter("firstName", contact.getFirstName());
-                query.setParameter("lastName", contact.getLastName());
-                query.setParameter("phone", contact.getPhone());
-                query.setParameter("email", contact.getEmail());
-                query.setParameter("id", contact.getId());
+                query.setParameter("firstName", user.getFirstName());
+                query.setParameter("email", user.getEmail());
+                query.setParameter("id", user.getId());
                 // Виконання HQL-запиту
                 query.executeUpdate();
                 // Транзакція виконується
@@ -134,7 +130,7 @@ public class ContactRepository implements BaseRepository<Contact> {
                 // HQL-запит.
                 // :[parameter name] - іменований параметр (named parameter),
                 // двокрапка перед іменем.
-                String hql = "DELETE FROM Contact WHERE id = :id";
+                String hql = "DELETE FROM User WHERE id = :id";
                 // Створення HQL-запиту
                 MutationQuery query = session.createMutationQuery(hql);
                 // Формування конкретних значень для певного іменованого параметра
@@ -158,9 +154,9 @@ public class ContactRepository implements BaseRepository<Contact> {
     }
 
     @Override
-    public Optional<Contact> readById(Long id) {
+    public Optional<User> readById(Long id) {
         Transaction transaction = null;
-        Optional<Contact> optional;
+        Optional<User> optional;
         try (Session session =
                      HibernateConfig.getSessionFactory().openSession()) {
             // Транзакція стартує
@@ -168,9 +164,9 @@ public class ContactRepository implements BaseRepository<Contact> {
             // HQL-запит.
             // :[parameter name] - іменований параметр (named parameter),
             // двокрапка перед іменем.
-            String hql = " FROM Contact c WHERE c.id = :id";
+            String hql = " FROM User c WHERE c.id = :id";
             // Створюємо запит
-            Query<Contact> query = session.createQuery(hql, Contact.class);
+            Query<User> query = session.createQuery(hql, User.class);
             query.setParameter("id", id);
             // Намагаємося отримати об'єкт за id
             optional = query.uniqueResultOptional();
@@ -190,18 +186,18 @@ public class ContactRepository implements BaseRepository<Contact> {
     }
 
     // Перевірка наявності об'єкту/сутності за певним id у БД
-    private boolean isEntityWithSuchIdExists(Contact contact) {
+    private boolean isEntityWithSuchIdExists(User user) {
         try (Session session =
                      HibernateConfig.getSessionFactory().openSession()) {
             // Перевірка наявності об'єкту за певним id
-            contact = session.get(Contact.class, contact.getId());
-            if (contact != null) {
-                Query<Contact> query =
-                        session.createQuery("FROM Contact", Contact.class);
+            user = session.find(User.class, user.getId());
+            if (user != null) {
+                Query<User> query =
+                        session.createQuery("FROM User", User.class);
                 query.setMaxResults(1);
                 query.getResultList();
             }
-            return contact != null;
+            return user != null;
         }
     }
 }

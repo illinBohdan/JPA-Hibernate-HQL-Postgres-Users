@@ -1,6 +1,6 @@
 package org.example.app.config;
 
-import org.example.app.entity.Contact;
+import org.example.app.entity.User;
 import org.example.app.view.AppView;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -18,7 +18,7 @@ public class HibernateConfig {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = getConfiguration();
-                configuration.addAnnotatedClass(Contact.class);
+                configuration.addAnnotatedClass(User.class);
                 ServiceRegistry serviceRegistry =
                         new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();

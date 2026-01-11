@@ -3,11 +3,11 @@ package org.example.app.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContactException extends RuntimeException {
+public class UserException extends RuntimeException {
 
     Map<String, String> errors;
 
-    public ContactException(String message, Map<String, String> errors) {
+    public UserException(String message, Map<String, String> errors) {
         super(message);
         this.errors = errors;
     }

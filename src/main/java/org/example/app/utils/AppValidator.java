@@ -39,7 +39,7 @@ public class AppValidator {
         return false;
     }
 
-    public static Map<String, String> validateContactData(Map<String, String> data) {
+    public static Map<String, String> validateUserData(Map<String, String> data) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -50,14 +50,6 @@ public class AppValidator {
             if (data.get("first_name") != null & data.get("first_name").isEmpty())
                 errors.put("first name", Message.INPUT_REQ_MSG.getMessage());
         }
-
-        if (data.containsKey("last_name")) {
-            if (data.get("last_name") != null & data.get("last_name").isEmpty())
-                errors.put("last name", Message.INPUT_REQ_MSG.getMessage());
-        }
-
-        if (data.containsKey("phone") & AppValidator.isPhoneValid(data.get("phone")))
-            errors.put("phone", Message.WRONG_PHONE_MSG.getMessage());
 
         if (data.containsKey("email") & AppValidator.isEmailValid(data.get("email")))
             errors.put("email", Message.WRONG_EMAIL_MSG.getMessage());

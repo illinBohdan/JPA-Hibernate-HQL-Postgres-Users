@@ -1,6 +1,6 @@
 package org.example.app.service;
 
-import org.example.app.controller.ContactController;
+import org.example.app.controller.UserController;
 import org.example.app.exceptions.OptionException;
 import org.example.app.utils.AppStarter;
 import org.example.app.utils.Message;
@@ -8,15 +8,15 @@ import org.example.app.view.*;
 
 public class AppService {
 
-    ContactController controller = new ContactController();
+    UserController controller = new UserController();
 
     public void filterChoice(int option) {
         switch (option) {
-            case 1 -> controller.createContact();
-            case 2 -> controller.readContacts();
-            case 3 -> controller.updateContact();
-            case 4 -> controller.deleteContact();
-            case 5 -> controller.readContactById();
+            case 1 -> controller.createUser();
+            case 2 -> controller.readUsers();
+            case 3 -> controller.updateUser();
+            case 4 -> controller.deleteUser();
+            case 5 -> controller.readUserById();
             case 0 -> new AppView().getOutput(Integer.toString(option));
             default -> {
                 try {
