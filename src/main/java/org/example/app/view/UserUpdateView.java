@@ -7,12 +7,17 @@ import java.util.Scanner;
 
 public class UserUpdateView {
 
-    // Отримуємо вхідні дані
-    public Map<String, String> getData() {
-        Scanner scanner = new Scanner(System.in);
-        Map<String, String> data = new HashMap<>();
+    Scanner scanner = new Scanner(System.in);
+    Map<String, String> data = new HashMap<>();
+
+    public Map<String, String> askId(){
         System.out.print("Enter User's ID: ");
         data.put("id", scanner.nextLine().trim());
+        return data;
+    }
+
+    // Отримуємо вхідні дані
+    public Map<String, String> getData() {
         System.out.print("Enter first name: ");
         data.put("first_name", scanner.nextLine().trim());
         System.out.print("Enter email in format example@mail.com: ");

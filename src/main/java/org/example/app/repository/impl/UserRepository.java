@@ -186,18 +186,9 @@ public class UserRepository implements BaseRepository<User> {
     }
 
     // Перевірка наявності об'єкту/сутності за певним id у БД
-    private boolean isEntityWithSuchIdExists(User user) {
-        try (Session session =
-                     HibernateConfig.getSessionFactory().openSession()) {
-            // Перевірка наявності об'єкту за певним id
-            user = session.find(User.class, user.getId());
-            if (user != null) {
-                Query<User> query =
-                        session.createQuery("FROM User", User.class);
-                query.setMaxResults(1);
-                query.getResultList();
-            }
-            return user != null;
+    public boolean isEntityWithSuchIdExists(Long id) {
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+            return session.find(User.class, id) != null;
         }
     }
 }

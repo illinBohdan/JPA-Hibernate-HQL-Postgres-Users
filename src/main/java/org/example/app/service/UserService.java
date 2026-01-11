@@ -99,4 +99,9 @@ public class UserService {
             return "\nUser: " + user + "\n";
         } else return Message.DATA_ABSENT_MSG.getMessage();
     }
+
+    public boolean checkID(Map<String, String> data){
+        User user = new UserMapper().mapUserData(data);
+        return repository.isEntityWithSuchIdExists(user.getId());
+    }
 }

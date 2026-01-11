@@ -2,6 +2,7 @@ package org.example.app.controller;
 
 import org.example.app.service.UserService;
 import org.example.app.utils.AppStarter;
+import org.example.app.utils.Message;
 import org.example.app.view.*;
 
 public class UserController {
@@ -22,8 +23,13 @@ public class UserController {
 
     public void updateUser() {
         UserUpdateView updateView = new UserUpdateView();
-        updateView.getOutput(service.updateUser(updateView.getData()));
-        AppStarter.startApp();
+        if(!service.checkID(updateView.askId())){
+          updateView.getOutput(Message.DATA_ABSENT_MSG.getMessage());
+            AppStarter.startApp();
+        }else {
+            updateView.getOutput(service.updateUser(updateView.getData()));
+            AppStarter.startApp();
+        }
     }
 
     public void deleteUser() {
